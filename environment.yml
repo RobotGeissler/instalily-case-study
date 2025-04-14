@@ -1,0 +1,22 @@
+name: instalily
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - flask
+      - flask-cors
+      - langchain
+      # - langchain-chroma
+      - langchain-deepseek
+      - langchain-openai
+      - langchain-community
+      - langchain-core
+      - langchain-huggingface
+      - openai
+      - chromadb
+      - duckdb
+      - tiktoken
+      - requests

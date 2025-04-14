@@ -1,0 +1,12 @@
+Issue: Refrigerator not cooling properly
+
+Steps to Diagnose:
+1. Check if condenser coils are dirty.
+2. Make sure the evaporator fan is running.
+3. Verify temperature settings.
+4. Test the start relay and capacitor.
+
+Common Fixes:
+- Clean coils
+- Replace start relay
+- Reset control board

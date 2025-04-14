@@ -1,0 +1,11 @@
+flask
+flask-cors
+langchain
+langchain-community
+langchain-core
+langchain-huggingface
+openai
+chromadb
+duckdb
+tiktoken
+requests

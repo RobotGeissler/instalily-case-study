@@ -1,0 +1,8 @@
+Model: Whirlpool Dishwasher WDT780SAEM1
+
+Common Parts:
+- PS11752778 (Ice Maker Assembly)
+- PS5136123 (Spray Arm)
+- PS389221 (Water Inlet Valve)
+
+Tip: For compatibility, always cross-check the part number on your existing component or refer to the model label inside the door panel.

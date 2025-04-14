@@ -1,0 +1,13 @@
+Part Number: PS11752778
+Part Name: Ice Maker Assembly
+
+Compatibility:
+- Whirlpool WDT780SAEM1
+- Whirlpool WRX735SDBM00
+- Maytag MDB8959SFZ4
+
+Installation Instructions:
+1. Disconnect power and water supply.
+2. Remove the ice bin and the mounting screws.
+3. Detach the old assembly and plug in the new one.
+4. Reinstall screws and test the new ice maker.
