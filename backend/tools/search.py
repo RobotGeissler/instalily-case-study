@@ -1,18 +1,40 @@
 from langchain.tools import Tool
 from playwright.sync_api import sync_playwright
+from playwright_stealth import stealth_sync
 import time, json
 
 def search_and_scrape_part_details(query: str) -> str:
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True,
-                                        args=["--disable-blink-features=AutomationControlled"])
+            # Can't run headless due to PartSelect's bot detection
+            browser = p.chromium.launch(headless=False)
+            # context = browser.new_context(
+            #     user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+            #     extra_http_headers={
+            #         "Accept-Language": "en-US,en;q=0.9",
+            #         "Accept-Encoding": "gzip, deflate, br",
+            #         "DNT": "1",
+            #         "Upgrade-Insecure-Requests": "1"
+            #     }
+            # )
+            # page = context.new_page()
             page = browser.new_page()
+            stealth_sync(page)  # Apply stealth mode to the page
             print(f"\n🔍 Searching for part: {query}")
             page.goto("https://www.partselect.com/", timeout=30000)
-            page.locator("#searchboxInput").fill(query)
+            try:
+                page.locator("#searchboxInput").fill(query)
+            except Exception as e:
+                ### Print page content for debugging
+                print("Page content for debugging:")
+                print(page.content())
+                return f"[Playwright Error] {str(e)}"
             page.keyboard.press("Enter")
-            
+            # page.wait_for_url("**/partdetail*.htm", timeout=10000)
+            # TODO not every query will have a part ID in the URL, so we need to handle that case
+            # Case 1: URL contains refrigerator ID
+            # Case 2: URL contains dishwasher ID (kind of the same case)
+            # Case 3: Nothing found, so we need to search for the part ID in the page content
             part_id = ''.join(filter(str.isdigit, query.split()[0]))
             print(f"🔍 Searching for part ID: {part_id}")
             page.wait_for_selector(f"[data-inventory-id='{part_id}']", timeout=10000)

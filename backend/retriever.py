@@ -42,12 +42,30 @@ class DeepSeekEmbeddings(Embeddings):
     
 def is_deepseek_available() -> bool:
     try:
-        response = requests.get("https://api.deepseek.com/v1/status")
+        api_key = os.getenv("DEEPSEEK_API_KEY")
+        if not api_key:
+            print("🚫 DEEPSEEK_API_KEY not found in environment.")
+            return False
+        headers = {"Authorization": f"Bearer {api_key}"}
+        response = requests.post(
+            "https://api.deepseek.com/v1/chat/completions",
+            headers=headers,
+            json={
+                "model": "deepseek-chat", 
+                "messages": [{"role": "user", "content": "Hello"}]
+            },
+        )
+
         if response.status_code == 200:
+            print("✅ DeepSeek API key is valid and service is available.")
             return True
-    except requests.RequestException:
-        pass
-    return False
+        else:
+            print(f"❌ DeepSeek API responded with: {response.status_code} {response.text}")
+            return False
+
+    except requests.RequestException as e:
+        print(f"❌ Error reaching DeepSeek API: {e}")
+        return False
 
 def select_embedding_backend() -> Embeddings:
     try:

@@ -7,11 +7,10 @@ I think so far it makes alot of sense to do a corrective agentic rag setup so th
 Progress update: going to bed for a few hours. Handshake is done but none of the steps below are finished technically. Deepseek will require a more detailed implementation. However, I am now positioned to finish them hopefully in short order and can use openai as a fall back.
 
 ## Steps (in order of priority)
-1. Integrate Deepseek
-2. Populate retriever data
-3. Create agent nodes
-4. Edit react chat ui
-5. Integrate Corrective critic layer
-6. Export environment, DOCs
-7. Container orchestration in docker to avoid compatibility issues
+1. Fix search to handle more than just part numbers
+2. Export environment, DOCs
+3. Container orchestration in docker to avoid compatibility issues
+4. Edit react chat ui - Unnecessary
+5. Populate retriever data - Difficult due to PartSelect bot detection
+6. Integrate Corrective critic layer - Difficult due to PartSelect Bot detection
 
