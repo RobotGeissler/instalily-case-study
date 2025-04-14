@@ -1,44 +1,54 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from retriever import build_retriever
-from langchain.chains import RetrievalQA
+from tools.search import search_and_scrape_part_details
 from langchain_openai import ChatOpenAI
 from langchain_deepseek import ChatDeepSeek
+from langchain.agents import Tool, AgentExecutor, initialize_agent
+from langchain.agents.agent_types import AgentType
+from langchain_core.tools import tool
 from retriever import is_deepseek_available
 
 app = Flask(__name__)
 CORS(app)
 
 retriever = build_retriever()
+
+# Choose LLM
 if is_deepseek_available():
     print("✅ DeepSeek is available")
-    llm = ChatDeepSeek(model="deepseek-chat")  # Or DeepSeek if using it
+    llm = ChatDeepSeek(model="deepseek-chat")
 else:
-    print("⚠️ DeepSeek is not available. Please check your API key or network connection.")
-    print("⚠️ Falling back to OpenAI GPT-4")
-    print("⚠️ This is not within the spec for the case study - H.")
+    print("⚠️ DeepSeek is not available. Falling back to OpenAI GPT-4")
     llm = ChatOpenAI(model="gpt-4")
-qa_chain = RetrievalQA.from_chain_type(
-    llm=llm,
-    chain_type="stuff",
-    retriever=retriever,
-    return_source_documents=True,
-    verbose=True,
+
+# Define tool
+search_tool = Tool.from_function(
+    name="PartSearchAndScrapeTool",
+    func=search_and_scrape_part_details,
+    description="Use this tool to find information about a specific part by part number."
 )
 
+# Agent
+agent = initialize_agent(
+    tools=[search_tool],
+    llm=llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True
+)
+
+# Potential BUG TypeError: input.trim is not a function
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
     user_message = data.get("message", "")
     print(f"💬 Received: {user_message}")
 
-    docs = retriever.get_relevant_documents(user_message)
-
-    output = qa_chain.invoke({
-        "input_documents": docs,
-        "query": user_message  # ✅ use "query" not "question"
-    })
-    result = output["result"]
+    try:
+        response = agent.invoke({"input": user_message})
+        result = response["output"]
+    except Exception as e:
+        result = f"[Agent Error] {str(e)}"
 
     return jsonify({
         "role": "assistant",

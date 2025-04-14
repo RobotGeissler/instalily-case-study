@@ -24,7 +24,8 @@ function ChatWindow() {
   }, [messages]);
 
   const handleSend = async (input) => {
-    if (input.trim() !== "") {
+    const userMessage = input.content ?? input;
+    if (typeof userMessage === "string" && userMessage.trim() !== "") {
       // Set user message
       setMessages(prevMessages => [...prevMessages, { role: "user", content: input }]);
       setInput("");
