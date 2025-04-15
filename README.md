@@ -31,7 +31,7 @@ The goal is to build an extensible, task-aware assistant that provides product c
    python main.py
    ```
 
-> 📝 **Note**: Make sure your `.env` file exists in the root directory with `DEEPSEEK_API_KEY` and `OPENAI_API_KEY` configured.
+> 📝 **Note**: Make sure your `.env` file exists in the root directory and react folder with `DEEPSEEK_API_KEY` and `OPENAI_API_KEY` configured as well as react docker variables off (see below).
 
 > 🧠 If the Chroma vector DB (`backend/db` or `backend/chroma`) was generated with an older LangChain version, **delete the directory** before running to avoid metadata errors.
 
@@ -81,9 +81,9 @@ This will:
     # This is for the retriever
     USE_DEEPSEEK=false # These matter less but need to be set
     DEBUG=false
-    USE_DOCKER=true
-    REACT_APP_USE_DOCKER=true
-    REACT_APP_BACKEND_HOST=http://backend:8000
+    USE_DOCKER=true # False if local
+    REACT_APP_USE_DOCKER=true # False if local
+    REACT_APP_BACKEND_HOST=http://backend:8000 # localhost:8000 if local
     ```
 
 - 🧪 You can verify the backend is running by visiting:
@@ -105,7 +105,7 @@ Scraping product details in bulk proved unreliable due to aggressive anti-bot de
 ### ⚠️ LLM Limitations
 Despite a working toolchain, I wasn’t able to get the system prompt to consistently handle ambiguous open-ended queries (e.g., no explicit SKU or part number). With more time, I could refine the regex preprocessing and prompt scaffolding to address this by iterating though all possible combination of part ypes and brand names.
 
-Time was unfortunately lost trying to build out a full RAG pipeline to provide a better user experience and avoid excessive dynamic searching—ultimately not viable given scraping constraints.
+Time was unfortunately lost trying to build out a full RAG pipeline to provide a better user experience and avoid excessive dynamic searching—ultimately not viable given scraping constraints. This also prevented me from adding things like memory or running multiple agents.
 
 ### Final Approach
 I used an on-demand search agents via Playwright to dynamically extract structured product information only when needed, drastically reducing suspicion while preserving functionality. 

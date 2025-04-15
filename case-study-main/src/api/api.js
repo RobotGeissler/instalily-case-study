@@ -7,6 +7,7 @@ export const getAIMessage = async (userQuery) => {
   try {    
     console.log("Using backend URL:", BASE_URL);
     const response = await fetch(`${BASE_URL}/chat`, {
+    // const response = await fetch(`http://localhost:8000/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -5,7 +5,7 @@ from urllib.parse import quote_plus
 from playwright.async_api import async_playwright
 from playwright_stealth import stealth_async
 from langchain.tools import Tool
-from asyncsearch import search_and_scrape_details_async  # assuming same directory structure
+from tools.asyncsearch import search_and_scrape_details_async  # assuming same directory structure
 
 async def general_part_search(query: str) -> str:
     try:
