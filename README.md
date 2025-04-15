@@ -15,7 +15,7 @@ The goal is to build an extensible, task-aware assistant that provides product c
 
 ## 🚀 Installation Instructions
 
-### 🧪 Local Installation (only Windows 11 option)
+### 🧪 Local Installation (only Windows 11 option available)
 
 #### 🔧 Python Backend
 
@@ -66,7 +66,7 @@ This will:
 #### 2. Important Notes
 
 - 📦 **Chroma vector DB must be rebuilt in Docker** if any metadata errors occur.
-  - Delete the old DB folder (e.g., `backend/db` or `backend/chroma`) on your host before first compose run:
+  - Delete any old DB folders (e.g., `backend/db` or `backend/chroma`) on your host before first compose run:
     ```bash
     rm -rf backend/db
     ```
@@ -75,62 +75,20 @@ This will:
     ```
     OPENAI_API_KEY=sk-...
     DEEPSEEK_API_KEY=sk-...
+    SCRAPER_API_KEY=<api-key>
+    BRIGHTDATA_USERNAME = <your-username>
+    BRIGHTDATA_PASSWORD = <your-pw>
+    # This is for the retriever
+    USE_DEEPSEEK=false # These matter less but need to be set
+    DEBUG=false
+    USE_DOCKER=true
+    REACT_APP_USE_DOCKER=true
+    REACT_APP_BACKEND_HOST=http://backend:8000
     ```
 
 - 🧪 You can verify the backend is running by visiting:
     - `http://localhost:8000/` (backend)
     - `http://localhost:3000/` (frontend)
-
-### 🗂️ Project Structure
-
-```instalily-case-study/
-├── .env
-├── docker-compose.yml
-├── Dockerfile
-├── environment.yml
-├── Makefile
-├── open_ai_test.py
-├── README.md
-├── requirements.txt
-├── working_tree_display.py
-├── backend/
-│   ├── all_product_links.json
-│   ├── deep_seek_test.py
-│   ├── generate_dummy_docs.py
-│   ├── main.py
-│   ├── retriever.py
-│   ├── chroma/chroma.sqlite3
-│   ├── data/refrigerator-manuals/
-│   │   ├── ps11752778.txt
-│   │   ├── troubleshooting-guide.txt
-│   │   └── wdt780saem1.txt
-│   ├── scraper/
-│   │   ├── scraper.py
-│   │   ├── scraperapi_test.py
-│   │   └── scraper_test.py
-│   └── tools/
-│       ├── agent_test.py
-│       ├── asyncsearch.py
-│       ├── search.py
-│       └── search_test.py
-├── case-study-main/
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── README.md
-│   ├── public/
-│   │   ├── index.html
-│   │   └── manifest.json
-│   └── src/
-│       ├── App.css
-│       ├── App.js
-│       ├── index.js
-│       ├── reportWebVitals.js
-│       ├── setupTests.js
-│       ├── api/api.js
-│       └── components/
-│           ├── ChatWindow.css
-│           └── ChatWindow.js
-```
 
 ### ⚠️ RAG Limitations & Countermeasures
 Scraping product details in bulk proved unreliable due to aggressive anti-bot defenses.
@@ -143,6 +101,11 @@ Scraping product details in bulk proved unreliable due to aggressive anti-bot de
 ✅ Playwright stealth mode & randomized delays
 
 ❌ Still blocked when scraping many product pages or running fully headless
+
+### ⚠️ LLM Limitations
+Despite a working toolchain, I wasn’t able to get the system prompt to consistently handle ambiguous open-ended queries (e.g., no explicit SKU or part number). With more time, I could refine the regex preprocessing and prompt scaffolding to address this by iterating though all possible combination of part ypes and brand names.
+
+Time was unfortunately lost trying to build out a full RAG pipeline to provide a better user experience and avoid excessive dynamic searching—ultimately not viable given scraping constraints.
 
 ### Final Approach
 I use on-demand search agents via Playwright to dynamically extract structured product information only when needed, drastically reducing suspicion while preserving functionality. 
