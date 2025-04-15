@@ -108,5 +108,5 @@ Despite a working toolchain, I wasn’t able to get the system prompt to consist
 Time was unfortunately lost trying to build out a full RAG pipeline to provide a better user experience and avoid excessive dynamic searching—ultimately not viable given scraping constraints.
 
 ### Final Approach
-I use on-demand search agents via Playwright to dynamically extract structured product information only when needed, drastically reducing suspicion while preserving functionality. 
+I used an on-demand search agents via Playwright to dynamically extract structured product information only when needed, drastically reducing suspicion while preserving functionality. 
 
