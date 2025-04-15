@@ -1,0 +1,19 @@
+# Use a Node base image
+FROM node:23-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy frontend source
+COPY ./case-study-main /app/
+
+# Install deps and build
+RUN npm install
+RUN npm run build
+
+# Serve with a lightweight HTTP server
+RUN npm install -g serve
+CMD ["serve", "-s", "build"]
+
+# Expose default serve port
+EXPOSE 3000

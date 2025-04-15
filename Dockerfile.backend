@@ -1,0 +1,21 @@
+# Use official Python image
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install system deps (needed for playwright and Chroma)
+RUN apt-get update && apt-get install -y curl git wget build-essential libglib2.0-0 xvfb libnss3 libgconf-2-4 libatk-bridge2.0-0 libxss1 libasound2 libxshmfence-dev libgbm1 libgtk-3-0 ca-certificates
+
+# Copy backend
+COPY ./backend /app
+COPY requirements.txt /app
+COPY .env /app
+
+# Install pip packages
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install Playwright browsers
+RUN playwright install --with-deps
+
+ENV PYTHONUNBUFFERED=1
+CMD ["python", "main.py"]

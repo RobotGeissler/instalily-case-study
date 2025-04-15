@@ -1,6 +1,9 @@
 flask
 flask-cors
 langchain
+langchain-chroma
+langchain-deepseek
+langchain-openai
 langchain-community
 langchain-core
 langchain-huggingface
@@ -9,3 +12,7 @@ chromadb
 duckdb
 tiktoken
 requests
+webdriver_manager
+playwright
+playwright_stealth
+pydantic

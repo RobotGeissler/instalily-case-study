@@ -1,3 +1,4 @@
 .env
 case-study-main/node_modules/
 backend/db/
+working*.py

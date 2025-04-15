@@ -1,9 +1,12 @@
+const BASE_URL = process.env.REACT_APP_USE_DOCKER === "true"
+  ? process.env.REACT_APP_BACKEND_HOST
+  : "http://localhost:8000";
 
 export const getAIMessage = async (userQuery) => {
 
-  try {
-    // Not much point to use https for security here
-    const response = await fetch("http://localhost:8000/chat", {
+  try {    
+    console.log("Using backend URL:", BASE_URL);
+    const response = await fetch(`${BASE_URL}/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

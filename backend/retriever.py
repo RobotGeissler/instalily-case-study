@@ -119,10 +119,10 @@ def build_retriever():
     if os.path.exists(CHROMA_DIR):
         print("📦 Loading existing Chroma DB...")
         persistent_client = chromadb.PersistentClient()
-        vectordb = Chroma(client=persistent_client, embedding_function=embedding_backend)
+        vectordb = Chroma(embedding_function=embedding_backend, client=persistent_client)
     else:
         print("🧠 Building new Chroma DB...")
-        vectordb = Chroma.from_documents(all_docs, embedding_function=embedding_backend, persist_directory=CHROMA_DIR)
+        vectordb = Chroma.from_documents(all_docs, embedding=embedding_backend, persist_directory=CHROMA_DIR)
 
     print("✅ Vector store created")  
     if os.getenv("DEBUG", "false").lower() == "true":

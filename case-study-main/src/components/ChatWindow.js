@@ -31,7 +31,9 @@ function ChatWindow() {
       setInput("");
 
       // Call API & set assistant message
+      console.log("✅ handleSend triggered"); // 🔍 Does this log?
       const newMessage = await getAIMessage(input);
+      console.log("✅ AI responded:", newMessage);
       setMessages(prevMessages => [...prevMessages, newMessage]);
     }
   };
