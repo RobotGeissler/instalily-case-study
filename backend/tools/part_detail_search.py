@@ -41,6 +41,7 @@ def scrape_part_details(page, part_id):
         "price": safe_text("span.price__currency") + safe_text("span.js-partPrice"),
         "stock": "In Stock" if "in stock" in safe_text('#mainAddToCart [itemprop="availability"]').lower() else "Out of Stock",
         "rating": safe_attr("div.rating .rating__stars__upper", 'style').split(":")[-1] + " - (" + safe_text("span[class*='rating__count']") + ")",
+        # Fragile selector, may need to be updated if the page structure changes
         "review_sample": [
             safe_attrs("div#CustomerReviews + div div.js-dataContainer div.rating div.rating__stars__upper", 'style'),
             safe_texts("div#CustomerReviews ~ div div.js-dataContainer div.d-md-flex.mt-2.mb-4 div.pd__cust-review__submitted-review__header.mb-2"),
@@ -66,8 +67,7 @@ def search_and_scrape_details(query: str) -> str:
             page.goto("https://www.partselect.com/", timeout=30000)
             page.locator("#searchboxInput").fill(query)
             page.keyboard.press("Enter")
-            time.sleep(2)
-
+            page.wait_for_load_state("networkidle")
             part_ids = extract_part_ids(query)
             results = []
 
@@ -98,7 +98,7 @@ def search_and_scrape_details(query: str) -> str:
     except Exception as e:
         return f"[Playwright Error] {str(e)}"
 
-advanced_search_tool = Tool.from_function(
+parts_search_tool = Tool.from_function(
     name="PartDetailScraper",
     description="Use this tool to find and extract structured details about one or more part numbers (e.g., PS123456).",
     func=search_and_scrape_details,
