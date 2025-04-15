@@ -10,6 +10,7 @@ from langchain.agents import Tool, AgentExecutor, initialize_agent
 from langchain.agents.agent_types import AgentType
 from langchain_core.tools import tool
 from retriever import is_deepseek_available
+from langchain.memory import ConversationBufferMemory
 import os
 
 app = Flask(__name__)
@@ -26,6 +27,8 @@ else:
     print("⚠️ DeepSeek is not available. Falling back to OpenAI GPT-4")
     llm = ChatOpenAI(model="gpt-4")
 
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
 # Agent
 agent = initialize_agent(
     tools=[parts_search_tool, appliance_search_tool, brand_appliance_product_search_tool],
@@ -33,6 +36,7 @@ agent = initialize_agent(
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
     verbose=True,
     handle_parsing_errors=True,
+    memory=memory,
     agent_kwargs={
         "system_message": '''
 You are an assistant for PartSelect.com that provides accurate product info and troubleshooting, specifically for refrigerators and dishwashers.
